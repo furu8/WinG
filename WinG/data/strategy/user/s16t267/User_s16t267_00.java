@@ -87,14 +87,13 @@ public class User_s16t267_00 extends GogoCompSub {
                 if ( values[i][j] == -2 ) { continue; }
                 //--  適当な評価の例
                 // 最初の3手
-                if ( prev.step == 1 ) { 
+                if ( prev.step == 1 ) { // 1手
                     values[6][6] = 100;
                     continue;
-                } else if ( prev.step == 3 /*prev.step % 2 == 1 && prev.step < 6*/ ) { // 奇数（黒） 
-                    if ( arround_start(values, i, j) ) {
-                        values[i][j] = 200;
-                        continue;
-                    }
+                
+                } else if ( prev.step == 3 ) { // 2手 
+                    arround_start(values, 6, 6);
+                    continue;
                 }
                 
                 // 相手の五連を崩す → 1000;
@@ -151,17 +150,18 @@ public class User_s16t267_00 extends GogoCompSub {
                 // 自分の石を守る → 200;
                 if ( check_rem(cell, mycolor*-1, i, j) ) { values[i][j] = 100; }
                 // ランダム
-                if ( values[i][j] == 0) {
-                    int aaa = (int) Math.round(Math.random() * 15);
-                    //System.out.printf("%d ", aaa);
-                    if ( values[i][j] < aaa) { values[i][j] = aaa; }
-                }
+                // if ( values[i][j] == 0) {
+                //     int aaa = (int) Math.round(Math.random() * 15);
+                //     //System.out.printf("%d ", aaa);
+                //     if ( values[i][j] < aaa) { values[i][j] = aaa; }
+                // }
                 
                 // 四々や四三の判定
                 // 飛び三や飛び四の判定
                 // 三をどちらで止めるか
             }
         }
+        System.out.printf("%d\n", prev.turn);
         output(values);
     }
 
@@ -248,32 +248,38 @@ public class User_s16t267_00 extends GogoCompSub {
     }
 
 //----------------------------------------------------------------
-//  周りに石があるか判定
+//  周りに石があるか判定（先手2手目用）
 //----------------------------------------------------------------
 
-    boolean arround_start(int[][] values, int x, int y) {
+    void arround_start(int[][] values, int x, int y) {
         for ( int i = -2; i < 4; i+=2 ) {
             for ( int j = -2; j < 4; j+=2 ) {
                 if ( i == 0 && j == 0 ) { continue; }
-                if ( arround(values, i+6, j+6) ) {
-                    return true;
+                if ( arround(values, i+x, j+y) ) {
+                    values[i+x][j+y] = 200;
                 }
             }
         }
-        return false;
     }
 
     boolean arround(int[][] values, int x, int y) {
         for ( int i = -1; i < 2; i++ ) {
             for ( int j = -1; j < 2; j++ ) {
-                if ( i == 0 && j == 0 ) { continue; }
-                if ( values[i+6][j+6] == -2 ) {
+                if ( values[x][y] != -2 ) {
+                    if ( i == 0 && j == 0 ) { continue; }
+                } else {
                     return false;
                 }
+                if ( values[i+x][j+y] == -2 ) { return false; } // 石があったらfalse
             }
         }
         return true;
     }
+
+//----------------------------------------------------------------
+//  周りに石があるか判定（先手2手目用）
+//----------------------------------------------------------------
+
 
 //----------------------------------------------------------------
 //  任意乱数生成
