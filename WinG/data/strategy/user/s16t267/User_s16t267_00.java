@@ -90,7 +90,6 @@ public class User_s16t267_00 extends GogoCompSub {
                 if ( prev.step == 1 ) { // 1手
                     values[6][6] = 100;
                     continue;
-                
                 } else if ( prev.step < 6 ) { // 2手 
                     arround_start(values, 6, 6);
                     continue;
@@ -281,29 +280,44 @@ public class User_s16t267_00 extends GogoCompSub {
     }
 
 //----------------------------------------------------------------
-//  周りに石があるか判定（先手2手目用）
-//----------------------------------------------------------------
-
-
-//----------------------------------------------------------------
-//  任意乱数生成
+//  相手の石の間に置く
 //----------------------------------------------------------------
 
     void near_random(int[][] board, int[][] values, int color, int x, int y) {
-        if ( x-1 < 0 || y-1 < 0 || x+1 >= size || y+1 >= size ) {
-           
-        } else {
-            if ( board[x-1][y] == color && board[x+1][y] == color ) {
-                values[x][y] = 400;
-            } else if ( board[x][y-1] == color && board[x][y+1] == color ) {
-                values[x][y] = 400;
-            } else if ( board[x-1][y-1] == color && board[x+1][y+1] == color ) {
-                values[x][y] = 400;
-            } else if ( board[x-1][y+1] == color && board[x+1][y-1] == color ) {
-                values[x][y] = 400;
-            } 
+        int x1, x2, y1, y2;
+        
+        for ( int k = 0; k < 4; k++ ) {
+            if ( x-1 >= 0 || y-1 >= 0 || x+1 < size || y+1 < size ) { // 盤面内に収まっている
+                change(x, y, x1, x2, y1, y2, k);
+                if ( near(board, color, x1, x2, y1, y2) ) {
+                    values[x][y] = 400;
+                } 
+            }   
         }
     } 
+
+    void change(int x, int y, int x1, int x2, int y1, int y2, int n) {
+        if ( n == 0 ) {
+            x1 = x - 1;     x2 = x + 1;
+            y1 = y;         y2 = y;
+        } else if ( n == 1 ) {
+            x1 = x;         x2 = x;
+            y1 = y - 1;     y2 = y + 1;
+        } else if ( n == 2 ) {
+            x1 = x - 1;     x2 = x + 1;
+            y1 = y - 1;     y2 = y + 1;
+        } else if ( n == 3 ) {
+            x1 = x - 1;     x2 = x + 1;
+            y1 = y + 1;     y2 = y - 1;
+        }
+    }
+
+    boolean near(int[][] board, int color, int x1, int x2, int y1, int y2) {
+        if ( board[x1][y1] == color && board[x2][y2] == color ) {
+            return true;
+        }
+        return false;
+    }
 
 //----------------------------------------------------------------
 //  連の全周チェック
@@ -328,7 +342,7 @@ public class User_s16t267_00 extends GogoCompSub {
             int x = i+k*dx;
             int y = j+k*dy;
             if ( x < 0 || y < 0 || x >= size || y >= size ) { return false; }   // 盤面外
-            if ( board[i+k*dx][j+k*dy] != color ) { return false; }             // プレイヤーの色と一致してない
+            if ( board[x][y] != color ) { return false; }                       // プレイヤーの色と一致してない
         }
         return true;
     }
@@ -357,7 +371,7 @@ public class User_s16t267_00 extends GogoCompSub {
             int x = i+k*dx;
             int y = j+k*dy;
             if ( x < 0 || y < 0 || x >= size || y >= size ) { return false; }   // 盤面外
-            if ( board[i+k*dx][j+k*dy] != color ) { return false; }             // プレイヤーの色と一致してない
+            if ( board[x][y] != color ) { return false; }                       // プレイヤーの色と一致してない
             if ( k == len-1 ) { color *= -1; }
         }
         return true;
