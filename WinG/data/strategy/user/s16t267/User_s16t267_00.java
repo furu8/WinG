@@ -91,7 +91,7 @@ public class User_s16t267_00 extends GogoCompSub {
                     values[6][6] = 100;
                     continue;
                 
-                } else if ( prev.step == 3 ) { // 2手 
+                } else if ( prev.step < 6 ) { // 2手 
                     arround_start(values, 6, 6);
                     continue;
                 }
@@ -256,7 +256,11 @@ public class User_s16t267_00 extends GogoCompSub {
             for ( int j = -2; j < 4; j+=2 ) {
                 if ( i == 0 && j == 0 ) { continue; }
                 if ( arround(values, i+x, j+y) ) {
-                    values[i+x][j+y] = 200;
+                    if ( i * j != 0 ) {         // 中心から斜め
+                        values[i+x][j+y] = 100;
+                    } else {                    // 中心から十字
+                        values[i+x][j+y] = 200;
+                    }
                 }
             }
         }
