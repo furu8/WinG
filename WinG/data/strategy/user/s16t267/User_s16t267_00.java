@@ -94,21 +94,19 @@ public class User_s16t267_00 extends GogoCompSub {
                     arround_start(values, 6, 6);
                     continue;
                 }
-                
                 // 相手の五連を崩す → 1000;
-                if ( check_run(cell, values, mycolor*-1, i, j, 5) ) {
+                if ( check_run(cell, mycolor*-1, i, j, 5) ) {
                     if ( check_rem(cell, mycolor, i, j) ) { values[i][j] = 1000; }
                     values[i][j] = 1000;
                     continue;
                 }
-
                 // 勝利(五取) → 950;
                 // if ( check_rem(cell, values, mycolor*-1, i, j) ) {
                 //     values[i][j] = 950;
                 //     continue;
                 // }
                 // 勝利(五連) → 900;
-                if ( check_run(cell, values, mycolor, i, j, 5) ) {
+                if ( check_run(cell, mycolor, i, j, 5) ) {
                     values[i][j] = 900;
                     continue;
                 }
@@ -118,41 +116,48 @@ public class User_s16t267_00 extends GogoCompSub {
                 //     continue;
                 // }
                 // 敗北阻止(五連) → 800;
-                if ( check_run(cell, values, mycolor*-1, i, j, 5) ) {
+                if ( check_run(cell, mycolor*-1, i, j, 5) ) {
                     values[i][j] = 800;
                     continue;
                 }
                 // 相手の四連を止める → 700;
-                if ( check_run(cell, values, mycolor*-1, i, j, 4) ) {
+                if ( check_run(cell, mycolor*-1, i, j, 4) ) {
                     values[i][j] = 700;
                     continue;
                 }
                 // 自分の四連を作る → 600;
-                if ( check_run(cell, values, mycolor, i, j, 4) ) {
+                if ( check_run(cell, mycolor, i, j, 4) ) {
                     values[i][j] = 600;
                     continue;
                 }
-                // 自分の三連または四連を作る（飛び）→ 500
-                 if ( check_run_tobi(cell, mycolor, i, j) ) {
-                    values[i][j] = 500;
+                // 自分の石を守る → 550;
+                if ( check_rem(cell, mycolor, i, j) ) { 
+                    values[i][j] = 550; 
                     continue;
                 }
-                // 自分の三連を作る → 400;
-                if ( check_run(cell, values, mycolor, i, j, 3) ) { values[i][j] = 400; }
-                
-                // 相手の石を取る → 350;
-                if ( check_rem(cell, mycolor, i, j) ) { values[i][j] = 350; }
-               
+                // 自分の三連または四連を作る（飛び）→ 500
+                if ( check_run_tobi(cell, mycolor, i, j) ) { 
+                    values[i][j] = 500; 
+                    continue;
+                }
+                // 相手の石をとる → 400;
+                if ( check_rem(cell, mycolor*-1, i, j) ) { 
+                    values[i][j] = 400; 
+                }
+                // 自分の三連を作る → 350;
+                if ( check_run(cell, mycolor, i, j, 3) ) { 
+                    values[i][j] = 350; 
+                }
                 // 相手の三連を止める → 300;
-                if ( check_run(cell, values, mycolor*-1, i, j, 3) ) { values[i][j] = 300; }
-                
+                if ( check_run(cell, mycolor*-1, i, j, 3) ) { 
+                    values[i][j] = 300; 
+                }
                 // 相手の石の間に置く → 200
-                if ( values[i][j] == 0 && check_run_tobi(cell, mycolor*-1, i, j) ) {
+                if ( check_run_tobi(cell, mycolor*-1, i, j) ) {
                     values[i][j] = 200;
                 }
                 // 三々の禁じ手は打たない → -1
-                // 自分の石を守る → 100;
-                if ( check_rem(cell, mycolor*-1, i, j) ) { values[i][j] = 100; }
+
                 // ランダム
                 if ( values[i][j] == 0) {
                     int aaa = (int) Math.round(Math.random() * 15);
@@ -183,7 +188,7 @@ public class User_s16t267_00 extends GogoCompSub {
                 if ( values[i][j] == -2 ) { continue; }
                 //--  適当な評価の例
                 // 相手の五連を崩す → 1000;
-                if ( check_run(cell, values, mycolor*-1, i, j, 5) ) {
+                if ( check_run(cell, mycolor*-1, i, j, 5) ) {
                     if ( check_rem(cell, mycolor, i, j) ) { values[i][j] = 1000; }
                     values[i][j] = 1000;
                     continue;
@@ -195,7 +200,7 @@ public class User_s16t267_00 extends GogoCompSub {
                 //     continue;
                 // }
                 // 勝利(五連) → 900;
-                if ( check_run(cell, values, mycolor, i, j, 5) ) {
+                if ( check_run(cell, mycolor, i, j, 5) ) {
                     values[i][j] = 900;
                     continue;
                 }
@@ -205,45 +210,60 @@ public class User_s16t267_00 extends GogoCompSub {
                 //     continue;
                 // }
                 // 敗北阻止(五連) → 800;
-                if ( check_run(cell, values, mycolor*-1, i, j, 5) ) {
+                if ( check_run(cell, mycolor*-1, i, j, 5) ) {
                     values[i][j] = 800;
                     continue;
                 }
                 // 相手の四連を止める → 700;
-                if ( check_run(cell, values, mycolor*-1, i, j, 4) ) {
+                if ( check_run(cell, mycolor*-1, i, j, 4) ) {
                     values[i][j] = 700;
                     continue;
                 }
                 // 自分の四連を作る → 600;
-                if ( check_run(cell, values, mycolor, i, j, 4) ) {
+                if ( check_run(cell, mycolor, i, j, 4) ) {
                     values[i][j] = 600;
                     continue;
                 }
-                // 自分の三連または四連を作る（飛び）→ 500
-                 if ( check_run_tobi(cell, mycolor, i, j) ) {
-                    values[i][j] = 500;
+                // 自分の石を守る → 550;
+                if ( check_rem(cell, mycolor, i, j) ) { 
+                    values[i][j] = 550; 
+                    continue;
                 }
-                // 自分の三連を作る → 400;
-                if ( check_run(cell, values, mycolor, i, j, 3) ) { values[i][j] = 400; }
-                
-                // 相手の石を取る → 350;
-                if ( check_rem(cell, mycolor, i, j) ) { values[i][j] = 350; }
-               
+                // 最初の3手
+                if ( prev.step == 2 ) { // 1手
+                    values[6][6] = 100;
+                    continue;
+                } else if ( prev.step < 7 ) { // 2手 
+                    arround_start(values, 6, 6);
+                }
+                // 自分の三連または四連を作る（飛び）→ 500
+                if ( check_run_tobi(cell, mycolor, i, j) ) { 
+                    values[i][j] = 500; 
+                    continue;
+                }
+                // 相手の石をとる → 400;
+                if ( check_rem(cell, mycolor*-1, i, j) ) { 
+                    values[i][j] = 400; 
+                }
+                // 自分の三連を作る → 350;
+                if ( check_run(cell, mycolor, i, j, 3) ) { 
+                    values[i][j] = 350; 
+                }
                 // 相手の三連を止める → 300;
-                if ( check_run(cell, values, mycolor*-1, i, j, 3) ) { values[i][j] = 300; }
-                
+                if ( check_run(cell, mycolor*-1, i, j, 3) ) { 
+                    values[i][j] = 300; 
+                }
                 // 相手の石の間に置く → 200
-                if ( values[i][j] == 0 && check_run_tobi(cell, mycolor*-1, i, j) ) {
+                if ( check_run_tobi(cell, mycolor*-1, i, j) ) {
                     values[i][j] = 200;
                 }
                 // 三々の禁じ手は打たない → -1
-                // 自分の石を守る → 100;
-                if ( check_rem(cell, mycolor*-1, i, j) ) { values[i][j] = 100; }
-                // if ( values[i][j] == 0) {
-                //     int aaa = (int) Math.round(Math.random() * 15);
-                //     //System.out.printf("%d ", aaa);
-                //     if ( values[i][j] < aaa) { values[i][j] = aaa; }
-                // }
+                // ランダム
+                if ( values[i][j] == 0) {
+                    int aaa = (int) Math.round(Math.random() * 15);
+                    //System.out.printf("%d ", aaa);
+                    if ( values[i][j] < aaa) { values[i][j] = aaa; }
+                }
                 
                 // 四々や四三の判定
                 // 飛び三や飛び四の判定
@@ -290,11 +310,11 @@ public class User_s16t267_00 extends GogoCompSub {
 //  連の全周チェック
 //----------------------------------------------------------------
 
-    boolean check_run(int[][] board, int[][] values, int color, int i, int j, int len) {
+    boolean check_run(int[][] board, int color, int i, int j, int len) {
         for ( int dx = -1; dx <= 1; dx++ ) {
             for ( int dy = -1; dy <= 1; dy++ ) {
                 if ( dx == 0 && dy == 0 ) { continue; }
-                if ( check_run_dir(board, values, color, i, j, dx, dy, len) ) { return true; }
+                if ( check_run_dir(board, color, i, j, dx, dy, len) ) { return true; }
             }
         }
         return false;
@@ -337,13 +357,18 @@ boolean check_run_tobi(int[][] board, int color, int x, int y) {
 //  連の方向チェック(止連・端連・長連も含む、飛びは無視)
 //----------------------------------------------------------------
 
-    boolean check_run_dir(int[][] board, int[][] values, int color, int i, int j, int dx, int dy, int len) {
-        //if ( len == 3 ) { len++; }          // 三連の反対側に自分の石があるかないか調べる
-        for ( int k = 1; k < len; k++ ) {
+    boolean check_run_dir(int[][] board, int color, int i, int j, int dx, int dy, int len) {
+        int tmp = len;
+        if ( tmp ==  5 ) { len--; }
+        for ( int k = 1; k <= len; k++ ) {
             int x = i+k*dx;
             int y = j+k*dy;
             if ( x < 0 || y < 0 || x >= size || y >= size ) { return false; }   // 盤面外
-            if ( board[x][y] != color ) { return false; }                       // プレイヤーの色と一致してないまたは石がない
+            if ( k == tmp ) {
+                if ( board[x][y] != 0 && board[x][y] != color ) { return false; }   // プレイヤーの色と一致してないまたは石がない
+            } else {
+                if ( board[x][y] != color ) { return false; } 
+            }
         }
         return true;
     }
